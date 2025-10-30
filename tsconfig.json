@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    // "target": "ESNext",
+    "target": "ESNext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "useDefineForClassFields": true,
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "types": ["vite/client", "node", "arco-design/web-vue/global"],
+    "typeRoots": ["./node_modules/@types", "types"],
+    "lib": ["ESNext", "DOM", "dom.iterable", "scripthost"],
+    "paths": {
+      "@/*": ["src/*"],
+      "/#/*": ["types/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/**/*.d.ts",
+    "types/**/*.ts",
+    "build/**/*.ts",
+    "build/**/*.d.ts",
+    "mock/**/*.ts",
+    "vite.config.mts",
+    "scripts/*.cjs"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.js"],
+  "files": ["hardhat.config.cjs"]
+}

@@ -1,0 +1,41 @@
+[
+    {
+        "path": "/",
+        "name": "home",
+        "meta": {
+            "title": "Marketplace",
+            "icon": "heyue",
+            "requiresAuth": false,
+            "order": 1
+        }
+    },
+    {
+        "path": "/nftpage/tokenId",
+        "name": "nftPage",
+        "meta": {
+            "icon": "heyue",
+            "requiresAuth": false,
+            "order": 2
+        }
+    },
+    {
+        "path": "/profile",
+        "name": "profile",
+        "meta": {
+            "title": "Profile",
+            "icon": "heyue",
+            "requiresAuth": false,
+            "order": 3
+        }
+    },
+    {
+        "path": "/sellnft",
+        "name": "sellNFT",
+        "meta": {
+            "title": "合约",
+            "icon": "heyue",
+            "requiresAuth": false,
+            "order": 3
+        }
+    }
+]
