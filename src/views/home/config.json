@@ -2,5 +2,5 @@
   "name": "Marketplace",
   "icon": "heyue",
   "order": 1,
-    "isParams":false
+  "isParams": false
 }

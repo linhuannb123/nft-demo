@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
-    // "target": "ESNext",
+    "composite": true,
     "target": "ESNext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "rootDir": ".",
+    "outDir": "dist",
+
+    "moduleResolution": "bundler",
     "useDefineForClassFields": true,
     "strict": true,
     "jsx": "preserve",
@@ -15,8 +18,9 @@
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["vite/client", "node", "arco-design/web-vue/global"],
+    "types": ["vite/client", "node"],
     "typeRoots": ["./node_modules/@types", "types"],
+    "allowJs": true,
     "lib": ["ESNext", "DOM", "dom.iterable", "scripthost"],
     "paths": {
       "@/*": ["src/*"],
@@ -31,11 +35,20 @@
     "types/**/*.d.ts",
     "types/**/*.ts",
     "build/**/*.ts",
+    "build/*.ts",
     "build/**/*.d.ts",
     "mock/**/*.ts",
     "vite.config.mts",
-    "scripts/*.cjs"
+    "scripts/*.cjs",
+    "build/utils.ts",
+    "src/Marketplace.json"
   ],
-  "exclude": ["node_modules", "dist", "**/*.js"],
-  "files": ["hardhat.config.cjs"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.js",
+    "build/plugins/mock.ts",
+    "build/plugins/svgIcon.ts",
+    "build/plugins/unocss.ts",
+  ]
 }

@@ -1,0 +1,59 @@
+{
+  "import": [
+    "@cspell/dict-lorem-ipsum/cspell-ext.json"
+  ],
+  "caseSensitive": false,
+  "dictionaryDefinitions": [
+    {
+      "name": "custom-dictionary",
+      "path": "./.cspell/custom-dictionary.txt",
+      "addWords": true
+    }
+  ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/lib/**",
+    "**/docs/**",
+    "**/vendor/**",
+    "**/public/**",
+    "**/static/**",
+    "**/out/**",
+    "**/tmp/**",
+    "**/*.d.ts",
+    "**/package.json",
+    "**/*.md",
+    "**/stats.html",
+    "eslint.config.mjs",
+    ".gitignore",
+    "cspell.json",
+    "commitlint.config.js",
+    ".cspell"
+  ],
+  "words": [
+    "Avenir",
+    "Axie",
+    "axios",
+    "curently",
+    "gifsicl",
+    "gifsicle",
+    "heyue",
+    "imgurl",
+    "INFT",
+    "IPFS",
+    "mozjpeg",
+    "nftpage",
+    "Numberish",
+    "optipng",
+    "persistedstate",
+    "pngquant",
+    "sellnft",
+    "shouye",
+    "Strct",
+    "Unocss",
+    "unplugin",
+    "VITE",
+    "Vueuse",
+    "warpple"
+  ]
+}

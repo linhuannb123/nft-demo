@@ -1,9 +1,8 @@
 <template>
-    <div>404</div>
+  <div>404</div>
 </template>
 <script setup lang="ts">
-
 defineOptions({
-    name: "NotFound",
-});
+  name: 'NotFound',
+})
 </script>
