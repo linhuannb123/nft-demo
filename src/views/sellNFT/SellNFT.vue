@@ -9,7 +9,7 @@
       class="bg-white shadow-md rounded px-8 pt-4 pb-8 mb-4"
       :label-col-props="labelColProps"
       :wrapper-col-props="wrapperColProps"
-      style="width: 28.5rem;">
+      style="width: 28.5rem">
       <h3 className="text-center text-base font-bold text-purple-500 mb-8 ">
         Upload your NFT to the marketplace
       </h3>
@@ -91,7 +91,7 @@
           @click="listNFT"
           :disabled="status"
           size="large"
-          style="width: 100%;">
+          style="width: 100%">
           List NFT
         </a-button>
       </a-form-item>
@@ -340,7 +340,7 @@ const listNFT = async (e: Event) => {
   .arco-form-item-wrapper-col {
     border-radius: 50%;
   }
-  .arco-btn-secondary[type="button"] {
+  .arco-btn-secondary[type='button'] {
     font-weight: 500;
     color: white;
     background: #7b2cf9;

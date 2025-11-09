@@ -178,7 +178,7 @@ watch(
     background-color: inherit;
   }
 }
-:deep(.arco-btn-primary[type="button"]) {
+:deep(.arco-btn-primary[type='button']) {
   font-weight: 500;
   background: rgb(34 197 94);
   border-radius: 0.25rem;
@@ -192,5 +192,4 @@ watch(
   // pointer-events: none;
   cursor: pointer;
 }
-
 </style>

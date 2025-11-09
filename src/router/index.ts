@@ -45,13 +45,12 @@ const loadDynamicRoutes = async (): Promise<ExtendedRouteRecordRaw[]> => {
 
   for (const [path, module] of Object.entries(jsonFiles)) {
     try {
-
       // console.log('ss', path, module)
       // path =>  ../views/Home/config.json
       // module => Module{Symbol(Symbol.toStringTag): 'Module'}
       // module => {name: '首页', icon: 'shouye', order: 1}
       // 解析目录名
-      const config: RouteConfig = module.default;
+      const config: RouteConfig = module.default
       // console.log('config', config)
       // path.split('/') => ['..','views','Home','config.json']
       //  path.split('/').slice(-2,-1) ["Home"]

@@ -2,7 +2,7 @@
   <!--  -->
   <a-row
     class="flex w-full text-white py-[6rem] gap-10"
-    style=" align-items: stretch;justify-content: space-evenly;">
+    style="align-items: stretch; justify-content: space-evenly">
     <a-col
       :xs="20"
       :sm="18"

@@ -54,7 +54,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 .app-bg {
-  background: url("@/assets/images/bg.png") no-repeat;
+  background: url('@/assets/images/bg.png') no-repeat;
   background-size: 100% 100%;
 }
 a {
