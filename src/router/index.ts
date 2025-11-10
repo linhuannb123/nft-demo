@@ -31,9 +31,7 @@ const staticRoutes: Array<RouteRecordRaw> = [
     meta: { title: '页面未找到', icon: '', requiresAuth: false, order: 1000 },
   },
 ]
-const capitalizeFirstLetter = (str: string) => {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
+
 // 动态路由加载(基于文件系统自动导入)
 const loadDynamicRoutes = async (): Promise<ExtendedRouteRecordRaw[]> => {
   const dynamicRoutes: ExtendedRouteRecordRaw[] = []
@@ -55,23 +53,21 @@ const loadDynamicRoutes = async (): Promise<ExtendedRouteRecordRaw[]> => {
       // path.split('/') => ['..','views','Home','config.json']
       //  path.split('/').slice(-2,-1) ["Home"]
       const dirName = path.split('/').slice(-2, -1)[0]
+
       // console.log('dur', dirName)
       // console.log('path', `../views/${dirName}/${config.order == 2 ? capitalizeFirstLetter(dirName) : config.name}.vue`)
-
+      // console.log('url', `../views/${dirName}/${config.name}.vue`)
       dynamicRoutes.push({
         path:
           config.order === 1
             ? '/'
             : config.isParams
-              ? `/${dirName.toLowerCase()}/:tokenId`
-              : `/${dirName.toLowerCase()}`,
-        name: config.order === 1 ? config.name.toLocaleLowerCase() : dirName,
-        component: () =>
-          import(
-            `../views/${dirName}/${config.order == 2 ? capitalizeFirstLetter(dirName) : config.name}.vue`
-          ),
+              ? `/${dirName}/:tokenId`
+              : `/${dirName}`,
+        name: dirName,
+        component: () => import(`../views/${dirName}/${config.name}.vue`),
         meta: {
-          title: config.name,
+          title: config.name === 'SellNFT' ? 'List My NFT' : config.name,
           icon: config.icon,
           requiresAuth: false,
           order: config.order,
@@ -137,7 +133,17 @@ export const routeState: {
       history: createWebHashHistory(),
       routes: [...dynamicRoutes, ...staticRoutes] as RouteRecordRaw[],
     })
-
+    router.beforeEach((to, _from) => {
+      // 给路由元信息添加菜单归属（可选，用于复杂场景）
+      to.meta.menu =
+        to.path === '/'
+          ? 'marketplace'
+          : to.path === '/sellnft'
+            ? 'sellNFT'
+            : to.path.includes('/profile')
+              ? 'profile'
+              : ''
+    })
     routeState.allRoutes.value = router.options
       .routes as ExtendedRouteRecordRaw[]
     return router

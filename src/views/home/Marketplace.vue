@@ -75,7 +75,7 @@ const getAllNFTs = async () => {
       }),
     )
     data.value = items
-    console.log('transaction', items)
+    // console.log('transaction', items)
     success(`成功加载 ${items.length} 个 NFT 数据`)
     loading.value = false
   } catch (e: any) {

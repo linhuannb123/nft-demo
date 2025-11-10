@@ -172,7 +172,7 @@ const labelColProps = ref({
 const OnChangeFile = async (e: Event) => {
   const input = e.target as HTMLInputElement
   const fileList = input?.files as unknown as any[]
-  console.log('file', input?.files)
+  // console.log('file', input?.files)
   if (!fileList || fileList.length === 0) return
 
   status.value = true
@@ -286,7 +286,7 @@ const rules = {
 const listNFT = async (e: Event) => {
   errorMessage.value = ''
   e.preventDefault()
-  console.log('form', form)
+  // console.log('form', form)
   // 执行表单验证 验证不通过有值，通过undefined;
   const validateResult = await formRef.value.validate()
   console.log('isValid', validateResult)

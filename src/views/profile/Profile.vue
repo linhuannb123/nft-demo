@@ -127,7 +127,7 @@ const getList = async () => {
     )
     //
     const transaction = await contract.getMyNFTs()
-    console.log('transaction', transaction)
+    // console.log('transaction', transaction)
     const items = await Promise.all(
       transaction.map(async (i: any[]) => {
         const tokenURI = await contract.tokenURI(Number(i[0]))

@@ -95,7 +95,7 @@ const data = ref<INFTList>({
 const route = useRoute()
 
 const buyNFT = async (tokenId: number) => {
-  console.log('tokenId', tokenId)
+  // console.log('tokenId', tokenId)
   if (!window.ethereum) {
     data.value = {
       price: 0,
@@ -149,7 +149,7 @@ const getNFTData = async (tokenId: number) => {
     const provider = new BrowserProvider(window.ethereum)
     const signer = await provider.getSigner()
     currAddress.value = (await signer.getAddress()) || '0x'
-    console.log(currAddress.value)
+    // console.log(currAddress.value)
     const contract = new Contract(
       Marketplace.address,
       Marketplace.abi,
@@ -168,7 +168,7 @@ const getNFTData = async (tokenId: number) => {
       name: tokenJSON.data.name,
       description: tokenJSON.data.description,
     }
-    console.log(items, 'items')
+    // console.log(items, 'items')
     data.value = items as INFTList
   } catch (error: any) {
     Message.error('NFT失败：', error)

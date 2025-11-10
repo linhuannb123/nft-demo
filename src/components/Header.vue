@@ -82,7 +82,7 @@ const filteredRoutes = computed(() =>
 )
 // const filteredRoutes = computed(() => routeState.visibleRoutes.value);
 
-console.log('filter', filteredRoutes)
+// console.log('filter', filteredRoutes.value)
 const pathname = computed(() => route.path)
 
 console.log(pathname)
