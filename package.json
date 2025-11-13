@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "clean": "npx rimraf node_modules",
     "node": "npx hardhat node --config hardhat.cjs",
+    "deploy:bsc": "npx hardhat run --network bscTestnet ./scripts/deploy.cjs",
     "deploy": "npx hardhat run --network localhost ./scripts/deploy.cjs",
     "lint": "run-p lint:eslint lint:prettier",
     "format": "run-p lint:prettier",

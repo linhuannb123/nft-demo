@@ -73,6 +73,7 @@ import { useRoute } from 'vue-router'
 import { computed, ref, watch } from 'vue'
 import { Message } from '@arco-design/web-vue'
 import { formatAddress } from '@/market'
+import useAuthStore from '@/store/auth'
 defineOptions({
   name: 'Header',
 })
@@ -84,17 +85,16 @@ const filteredRoutes = computed(() =>
 
 // console.log('filter', filteredRoutes.value)
 const pathname = computed(() => route.path)
-
+const authStore = useAuthStore()
+console.log('authStore', authStore.$state.currentAccount)
 console.log(pathname)
 const btnBg = ref<string>('rgb(34, 197, 94)')
 const hoverBg = ref<string>('rgb(29, 78, 216)')
-const usedChainId = ref<string>('0x7a69') // localhost
+// 修改网络id  localhost 0x7a69 bscTest  0x61
+const usedChainId = ref<string>('0x7a69')
 // 连接状态
 const connected = ref<boolean>(false)
-
-// 当前metamask地址
-const currAddress = ref<string>('0x')
-const addressText = computed(() => formatAddress(currAddress.value))
+const addressText = computed(() => formatAddress(authStore.currentAccount))
 // 切换按钮样式
 const updateButton = (bool: boolean) => {
   if (bool) {
@@ -111,13 +111,14 @@ const updateButton = (bool: boolean) => {
 // 连接钱包
 const connectWebsite = async () => {
   if (!window.ethereum) {
-    currAddress.value = '0x'
+    authStore.setAuth('')
     updateButton(false)
     Message.warning('Please install MetaMask!')
     return
   }
   // 强制进入本地模式
   const chainId = await window.ethereum.request({ method: 'eth_chainId' })
+  console.log('chainId', chainId)
   if (chainId !== usedChainId.value) {
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
@@ -126,24 +127,28 @@ const connectWebsite = async () => {
   }
   // 请求账户并刷新地址
   getAddress()
-  window.location.replace(pathname.value)
 }
 const getAddress = async () => {
   try {
     const accounts = (await window.ethereum?.request({
       method: 'eth_requestAccounts',
     })) as string[]
-    currAddress.value = accounts[0]
+
+    authStore.setAuth(accounts[0])
     updateButton(true)
   } catch (error: any) {
-    currAddress.value = '0x'
+    authStore.setAuth('')
     updateButton(false)
     Message.error('获取地址失败：', error.message)
   }
 }
 const handleAccountsChanged = (accounts: any) => {
   console.log('accounts changed:', accounts)
-  window.location.reload()
+  if (accounts.length > 0) {
+    authStore.setAuth(accounts[0])
+  } else {
+    authStore.setAuth('')
+  }
 }
 onMounted(async () => {
   await getAddress()
@@ -153,7 +158,7 @@ onMounted(async () => {
 })
 onUnmounted(() => {
   if (!window.ethereum) {
-    currAddress.value = '0x'
+    authStore.setAuth('')
     updateButton(false)
     Message.warning('Please install MetaMask!')
     return
@@ -163,21 +168,17 @@ onUnmounted(() => {
 })
 
 watch(
-  () => currAddress.value,
+  () => authStore.$state.currentAccount,
   () => {
-    console.log('value', currAddress.value)
+    console.log('value', authStore.$state.currentAccount)
+  },
+  {
+    deep: true,
+    immediate: true,
   },
 )
 </script>
 <style scoped lang="scss">
-.bg-style {
-  background: inherit;
-}
-.btn-style {
-  &:hover {
-    background-color: inherit;
-  }
-}
 :deep(.arco-btn-primary[type='button']) {
   font-weight: 500;
   background: rgb(34 197 94);

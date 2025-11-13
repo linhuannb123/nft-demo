@@ -25,7 +25,7 @@ task('block-number', 'Prints the current block number').setAction(
 
 // 从环境变量获取配置
 const BSC_TEST = process.env.VITE_RPC_URL
-const PRIVATE_KEY = process.env.VITE_PRIVATEKEY_ADDRESS
+const PRIVATE_KEY = process.env.VITE_APP_PRIVATE_KEY
 console.log('env', BSC_TEST, PRIVATE_KEY)
 
 /** @type import('hardhat/config').HardhatUserConfig */
@@ -39,9 +39,10 @@ const config = {
     },
     bscTestnet: {
       url: BSC_TEST,
-      accounts: [PRIVATE_KEY || ''],
+      accounts: [PRIVATE_KEY],
       chainId: 97, // BSC 测试网链 ID
-      gasPrice: 20000000000, // 可选：设置 gasPrice
+      gasPrice: 30000000000, // 可选：设置 gasPrice
+      gas: 200000, // 关键：添加Gas限额，NFT上架/转账足够用（20万）
     },
     // 可选：添加其他网络配置
     // polygonAmoy: {

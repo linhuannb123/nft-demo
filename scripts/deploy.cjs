@@ -7,6 +7,7 @@ async function deploy() {
   const nftMarket = await contract.deploy();
   await nftMarket.waitForDeployment();
   console.log("Token1的合约地址：", await nftMarket.target);
+
   expect(await nftMarket.getListPrice()).eq(ethers.parseEther("0.01"));
   const data = {
     address: await nftMarket.target,

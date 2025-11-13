@@ -100,15 +100,17 @@ import NftTitle from '@/components/NftTitle.vue'
 import Marketplace from '@/Marketplace.json'
 import axios from 'axios'
 import { Message } from '@arco-design/web-vue'
+import useAuthStore from '@/store/auth'
 defineOptions({
   name: 'Profile',
 })
-const currAddress = ref<string>('0x')
+const authStore = useAuthStore()
+const currAddress = computed(() => authStore.$state.currentAccount || '0x')
 const nftTotalPrice = ref<number>(0)
 const data = ref<INFTList[]>([])
 const getList = async () => {
   if (!window.ethereum) {
-    currAddress.value = '0x'
+    authStore.setAuth('')
     nftTotalPrice.value = 0
     data.value = []
     Message.warning('Please install MetaMask!')
@@ -119,7 +121,7 @@ const getList = async () => {
   try {
     const provider = new BrowserProvider(window.ethereum)
     const signer = await provider.getSigner()
-    currAddress.value = await signer.getAddress()
+
     const contract = new Contract(
       Marketplace.address,
       Marketplace.abi,
@@ -151,14 +153,25 @@ const getList = async () => {
     console.log('items', items, sumPrice)
     Message.success('You successfully My List NFT!')
   } catch (error: any) {
-    currAddress.value = '0x'
+    authStore.setAuth('')
     nftTotalPrice.value = 0
     data.value = []
     Message.error('加载NFT列表失败：' + error.message)
   }
 }
 
-onMounted(async () => {
-  await getList()
-})
+// onMounted(async () => {
+//   await getList()
+// })
+watch(
+  () => authStore.$state.currentAccount,
+  async () => {
+    console.log(
+      'account changed in profile view',
+      authStore.$state.currentAccount,
+    )
+    await getList()
+  },
+  { deep: true, immediate: true },
+)
 </script>

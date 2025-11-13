@@ -107,8 +107,8 @@ import { NFTFrom, uploadJSONToIPFS } from '@/pinata'
 import { Message } from '@arco-design/web-vue'
 import { BrowserProvider, Contract, parseUnits, toBeHex } from 'ethers'
 import { reactive, ref } from 'vue'
-
 import Marketplace from '@/Marketplace.json'
+
 // $refs.formRef.resetFields()
 defineOptions({
   name: 'ListMyNFT',
@@ -131,7 +131,7 @@ const form = reactive<NFTFrom>({
   image: '',
 })
 console.log(import.meta.env.VITE_APP_PINATA_JWT)
-
+const router = useRouter()
 const autoSize = ref({
   minRows: 5,
   maxRows: 5,
@@ -302,6 +302,7 @@ const listNFT = async (e: Event) => {
   try {
     const nftUrl = await uploadJSONToIPFS(form)
     console.log('nftUrl', nftUrl)
+    // const gasPrice = parseUnits("30", "gwei"); // 30 Gwei
     // const priceWei = formatUnits(form.price, "ether");
     const priceWei = parseUnits(form.price.toString(), 'ether')
     const priceHex = toBeHex(priceWei)
@@ -322,7 +323,7 @@ const listNFT = async (e: Event) => {
     // // 使用接口
     status.value = false
     formRef.value?.clearValidate()
-    window.location.replace('/')
+    router.push({ path: '/', replace: true })
   } catch (e: any) {
     console.log('提交错误:', e)
     status.value = false

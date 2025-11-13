@@ -105,7 +105,7 @@ export const isStrctEmptyStr = (str: string | null) => {
   return str == null || str.trim() === ''
 }
 export const formatAddress = (addr: string): string => {
-  if (addr === '0x') return 'Not Connected. Please login to view NFT'
+  if (addr === '') return 'Not Connected. Please login to view NFT'
   const address = addr.toLowerCase()
   const hasPrefix = address.startsWith('0x')
   const addressWithoutPrefix = hasPrefix ? address.slice(2) : address
