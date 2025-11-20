@@ -70,13 +70,14 @@
 <script lang="ts" setup>
 import { routeState } from '@/router'
 import { useRoute } from 'vue-router'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { Message } from '@arco-design/web-vue'
 import { formatAddress } from '@/market'
 import useAuthStore from '@/store/auth'
 defineOptions({
   name: 'Header',
 })
+const { warning, error } = Message
 const route = useRoute()
 const filteredRoutes = computed(() =>
   routeState.visibleRoutes.value.filter((v) => !v.path.includes('tokenId')),
@@ -113,7 +114,7 @@ const connectWebsite = async () => {
   if (!window.ethereum) {
     authStore.setAuth('')
     updateButton(false)
-    Message.warning('Please install MetaMask!')
+    warning('Please install MetaMask!')
     return
   }
   // 强制进入本地模式
@@ -136,10 +137,10 @@ const getAddress = async () => {
 
     authStore.setAuth(accounts[0])
     updateButton(true)
-  } catch (error: any) {
+  } catch (e: any) {
     authStore.setAuth('')
     updateButton(false)
-    Message.error('获取地址失败：', error.message)
+    error('获取地址失败：', e.message)
   }
 }
 const handleAccountsChanged = (accounts: any) => {
@@ -160,7 +161,7 @@ onUnmounted(() => {
   if (!window.ethereum) {
     authStore.setAuth('')
     updateButton(false)
-    Message.warning('Please install MetaMask!')
+    warning(WALLET_ERROR)
     return
   }
   // 取消监听

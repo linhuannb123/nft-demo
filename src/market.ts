@@ -36,7 +36,10 @@ export interface INFTList {
 }
 //定义一些常见报错
 
-const INVALID_AMOUNT_MSG = '输入价格必须大于 0'
+export const INVALID_AMOUNT_MSG = '输入价格必须大于 0'
+export const WALLET_ERROR = 'Please install MetaMask!'
+export const CHIAN_ID_ERROR = 'Please switch Localhost network!'
+export const CONNECT_ERROR = 'Please connect wallet!'
 /**
  * 安全地将金额字符串转化为Wei
  * @param amount 金额字符串 （如 "1.5"）

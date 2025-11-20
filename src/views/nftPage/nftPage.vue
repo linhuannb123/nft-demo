@@ -76,12 +76,14 @@ import { INFTList } from '@/market'
 import { BrowserProvider, Contract, formatUnits, parseUnits } from 'ethers'
 import Marketplace from '@/Marketplace.json'
 import axios from 'axios'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { Message } from '@arco-design/web-vue'
 
 defineOptions({
   name: 'NftPage',
 })
+const { success, warning, error } = Message
+
 const currAddress = ref('0x')
 const data = ref<INFTList>({
   price: 0,
@@ -107,7 +109,7 @@ const buyNFT = async (tokenId: number) => {
       description: '',
     }
     currAddress.value = '0x'
-    Message.warning('Please install MetaMask!')
+    warning('Please install MetaMask!')
     return
   }
   try {
@@ -123,10 +125,17 @@ const buyNFT = async (tokenId: number) => {
       value: priceWei,
     })
     await transaction.wait()
-    Message.success('You successfully bought the NFT!')
-  } catch (error: any) {
-    console.log('error', error)
-    Message.error('购买NFT失败：', error?.data?.message)
+    success('You successfully bought the NFT!')
+  } catch (e: any) {
+    // 详细的错误处理
+    if (e.message.includes('Network Error')) {
+      error('网络请求失败，请检查网络连接')
+    } else if (e.message.includes('execution reverted')) {
+      error('合约调用getAllNFTs方法失败，请联系管理员')
+    } else {
+      console.log('error', error)
+      error('购买NFT失败：', +e?.message)
+    }
   }
 }
 
@@ -142,7 +151,7 @@ const getNFTData = async (tokenId: number) => {
       description: '',
     }
     currAddress.value = '0x'
-    Message.warning('Please install MetaMask!')
+    warning('Please install MetaMask!')
     return
   }
   try {
@@ -170,8 +179,15 @@ const getNFTData = async (tokenId: number) => {
     }
     // console.log(items, 'items')
     data.value = items as INFTList
-  } catch (error: any) {
-    Message.error('NFT失败：', error)
+  } catch (e: any) {
+    // 详细的错误处理
+    if (e.message.includes('Network Error')) {
+      error('网络请求失败，请检查网络连接')
+    } else if (e.message.includes('execution reverted')) {
+      error('合约调用getAllNFTs方法失败，请联系管理员')
+    } else {
+      error('NFT失败：', +e.message)
+    }
   }
 }
 

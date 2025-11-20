@@ -101,19 +101,22 @@ import Marketplace from '@/Marketplace.json'
 import axios from 'axios'
 import { Message } from '@arco-design/web-vue'
 import useAuthStore from '@/store/auth'
+import { ref, computed, watch } from 'vue'
 defineOptions({
   name: 'Profile',
 })
+const { success, warning, error } = Message
+
 const authStore = useAuthStore()
 const currAddress = computed(() => authStore.$state.currentAccount || '0x')
 const nftTotalPrice = ref<number>(0)
 const data = ref<INFTList[]>([])
 const getList = async () => {
+  nftTotalPrice.value = 0
+  data.value = []
   if (!window.ethereum) {
     authStore.setAuth('')
-    nftTotalPrice.value = 0
-    data.value = []
-    Message.warning('Please install MetaMask!')
+    warning('Please install MetaMask!')
     return
   }
   let sumPrice = 0
@@ -151,12 +154,16 @@ const getList = async () => {
     data.value = items
     nftTotalPrice.value = sumPrice
     console.log('items', items, sumPrice)
-    Message.success('You successfully My List NFT!')
-  } catch (error: any) {
-    authStore.setAuth('')
-    nftTotalPrice.value = 0
-    data.value = []
-    Message.error('加载NFT列表失败：' + error.message)
+    success('You successfully My List NFT!')
+  } catch (e: any) {
+    // 详细的错误处理
+    if (e.message.includes('Network Error')) {
+      error('网络请求失败，请检查网络连接')
+    } else if (e.message.includes('execution reverted')) {
+      error('合约调用getAllNFTs方法失败，请联系管理员')
+    } else {
+      error('加载NFT列表失败：' + e.message)
+    }
   }
 }
 

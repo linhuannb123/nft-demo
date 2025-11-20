@@ -36,13 +36,17 @@ defineOptions({
   name: 'Marketplace',
 })
 const data = ref<INFTList[]>([])
-const nftData = ref([])
 const updateStatus = ref<boolean>(false)
 const { success, warning, error } = Message
 const loading = ref<boolean>(false)
 const getAllNFTs = async () => {
+  data.value = []
+  // 在函数开头增加一个守卫，防止不必要的执行
+  if (loading.value) {
+    return
+  }
+
   if (!window.ethereum) {
-    nftData.value = []
     warning('Please install MetaMask!')
     return
   }
@@ -79,7 +83,15 @@ const getAllNFTs = async () => {
     success(`成功加载 ${items.length} 个 NFT 数据`)
     loading.value = false
   } catch (e: any) {
-    error('加载 NFT 数据失败：' + e.message)
+    // 详细的错误处理
+    if (e.message.includes('Network Error')) {
+      error('网络请求失败，请检查网络连接')
+    } else if (e.message.includes('execution reverted')) {
+      error('合约调用getAllNFTs方法失败，请联系管理员')
+    } else {
+      error('加载 NFT 数据失败：' + e.message)
+    }
+  } finally {
     loading.value = false
   }
 }

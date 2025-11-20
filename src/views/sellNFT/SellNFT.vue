@@ -102,7 +102,7 @@
 <script setup lang="ts">
 import axios from 'axios'
 import FormData from 'form-data'
-import { isStrctEmptyStr } from '@/market'
+import { isStrctEmptyStr, WALLET_ERROR } from '@/market'
 import { NFTFrom, uploadJSONToIPFS } from '@/pinata'
 import { Message } from '@arco-design/web-vue'
 import { BrowserProvider, Contract, parseUnits, toBeHex } from 'ethers'
@@ -113,6 +113,8 @@ import Marketplace from '@/Marketplace.json'
 defineOptions({
   name: 'ListMyNFT',
 })
+const { success, warning, error } = Message
+
 // 上传进度0-100
 const progress = ref<number>(0)
 // 上传状态:success,error
@@ -162,7 +164,7 @@ const labelColProps = ref({
 //         } catch (e) {
 //             status.value = false;
 //             console.log("Error during file upload", e);
-//             Message.error('Image upload failed, please try again');
+//             error('Image upload failed, please try again');
 //             // 清除表单中 image 字段的错误状态
 //             formRef.value?.clearValidate("image");
 //         }
@@ -231,7 +233,7 @@ const OnChangeFile = async (e: Event) => {
     form.image = imgUrl // 预览图地址
     uploadStatus.value = 'success'
 
-    Message.success('Image uploaded successfully!')
+    success('Image uploaded successfully!')
   } catch (e: any) {
     status.value = false
     uploadStatus.value = 'error'
@@ -285,6 +287,9 @@ const rules = {
 
 const listNFT = async (e: Event) => {
   errorMessage.value = ''
+  if (status.value) {
+    return
+  }
   e.preventDefault()
   // console.log('form', form)
   // 执行表单验证 验证不通过有值，通过undefined;
@@ -293,11 +298,16 @@ const listNFT = async (e: Event) => {
   if (validateResult) {
     return
   }
-  if (!form.image || isStrctEmptyStr(form.image) || !window.ethereum) {
+  if (!window.ethereum) {
+    warning(WALLET_ERROR)
+    return
+  }
+  if (!form.image || isStrctEmptyStr(form.image)) {
     uploadStatus.value = 'error'
     errorMessage.value = 'Please fill all the fields!'
     return
   }
+
   status.value = true
   try {
     const nftUrl = await uploadJSONToIPFS(form)
@@ -319,15 +329,23 @@ const listNFT = async (e: Event) => {
       value: listingPrice.toString(),
     })
     await transaction.wait()
-    Message.success('Successfully listed your NFT!')
+    success('Successfully listed your NFT!')
     // // 使用接口
     status.value = false
     formRef.value?.clearValidate()
     router.push({ path: '/', replace: true })
   } catch (e: any) {
     console.log('提交错误:', e)
+    // 详细的错误处理
+    if (e.message.includes('Network Error')) {
+      error('网络请求失败，请检查网络连接')
+    } else if (e.message.includes('execution reverted')) {
+      error('合约调用getAllNFTs方法失败，请联系管理员')
+    } else {
+      error(e.message || 'Listing failed, please try again')
+    }
+  } finally {
     status.value = false
-    Message.error(e.message || 'Listing failed, please try again')
   }
 }
 </script>
